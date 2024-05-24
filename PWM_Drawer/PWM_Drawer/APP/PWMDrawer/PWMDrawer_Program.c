@@ -50,30 +50,37 @@ None
  	while (pixel_width_count < (128U - 8U))
 	 {
  		GLCD_VoidDisplaySpecialPattern(PWM_DRAWER_GLCD_RISING_EDGE); pixel_width_count += 5;
- 		for (i = 0; i < ((u8)(copy_f32High_Time / (f32)1000)); i++)
-		 {
+		 
+ 		for (i = 0; i < ((u16)(copy_f32High_Time*(f32)10)); i++)
+		{
  			GLCD_VoidDisplaySpecialPattern(PWM_DRAWER_GLCD_HIGH_LINE); pixel_width_count += 5;
  		}
+		 
  		GLCD_VoidDisplaySpecialPattern(PWM_DRAWER_GLCD_FALLING_EDGE); pixel_width_count += 5;
- 		for (i = 0; i < ((u8)(copy_f32Low_Time / (f32)1000)); i++)
-		 {
+		 
+ 		for (i = 0; i < ((u16)(copy_f32Low_Time*(f32)10)); i++)
+		{
  			GLCD_VoidDisplaySpecialPattern(PWM_DRAWER_GLCD_LOW_LINE); pixel_width_count += 5;
- 		}
+		}
  	}
  
  	/* Display Arrow for Time Period */
  	GLCD_VoidGoToPos(5, 0);
  	GLCD_VoidDisplaySpecialPattern(PWM_DRAWER_GLCD_LEFT_ARROW_HEAD);
- 	for (i = 0; i < ((u8)(copy_f32High_Time / (f32)1000)); i++)
-	 {
+	 
+ 	for (i = 0; i < ((u16)(copy_f32High_Time*(f32)10)); i++)
+	{
  		GLCD_VoidDisplaySpecialPattern(PWM_DRAWER_GLCD_ARROW_MIDDLE_BODY);
  	}
+	 
  	GLCD_VoidDisplaySpecialPattern(PWM_DRAWER_GLCD_ARROW_MIDDLE_BODY);
- 	for (i = 0; i < ((u8)(copy_f32Low_Time / (f32)1000 )); i++)
-	 {
+	 
+ 	for (i = 0; i < ((u16)(copy_f32Low_Time*(f32)10)); i++)
+	{
  		GLCD_VoidDisplaySpecialPattern(PWM_DRAWER_GLCD_ARROW_MIDDLE_BODY);
  	}
- 	GLCD_VoidDisplaySpecialPattern(PWM_DRAWER_GLCD_RIGHT_ARROW_HEAD);
+	 
+	GLCD_VoidDisplaySpecialPattern(PWM_DRAWER_GLCD_RIGHT_ARROW_HEAD);
  
  	/* Display Time Period Value */
  	GLCD_VoidGoToPos(4, 0);
