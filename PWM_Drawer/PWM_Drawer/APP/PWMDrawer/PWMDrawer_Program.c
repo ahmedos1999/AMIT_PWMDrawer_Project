@@ -27,6 +27,7 @@ None
 
  void PWMDrawer_VoidDrawSignal(f32 copy_f32Duty, f32 copy_f32Frequency, f32 copy_f32Periodic_Time, f32 copy_f32High_Time, f32 copy_f32Low_Time)
  {	
+<<<<<<< HEAD
 	 u16 local_u16Scale = 0;
 	 
 	 if ((u16)copy_f32Frequency < 1)
@@ -51,6 +52,10 @@ None
 	 }
 
 	 u16 local_u16Counter = 0;
+=======
+	u16 local_u16Counter = 0;
+	 
+>>>>>>> refs/remotes/origin/main
  	/* Display Signal Data (Frequency and Duty) Values */
  	GLCD_VoidGoToPos(0, 0);
  	char txt1[15] = "Freq.=";
@@ -69,15 +74,28 @@ None
  	/* Display Signal Shape */
  	GLCD_VoidGoToPos(6, 0);
  	u8 pixel_width_count = 0;
+<<<<<<< HEAD
  	while (pixel_width_count < 120U)
 	 {
  		GLCD_VoidDisplaySpecialPattern(PWM_DRAWER_GLCD_RISING_EDGE); pixel_width_count += 5;
  		for (local_u16Counter = 0; local_u16Counter < ((u16)(copy_f32High_Time*(f32)local_u16Scale)); local_u16Counter++)
+=======
+ 	while (pixel_width_count < (128U - 8U))
+	 {
+ 		GLCD_VoidDisplaySpecialPattern(PWM_DRAWER_GLCD_RISING_EDGE); pixel_width_count += 5;
+		 
+ 		for (local_u16Counter = 0; local_u16Counter < ((u16)(copy_f32High_Time*(f32)10)); local_u16Counter++)
+>>>>>>> refs/remotes/origin/main
 		{
  			GLCD_VoidDisplaySpecialPattern(PWM_DRAWER_GLCD_HIGH_LINE); pixel_width_count += 5;
  		}
  		GLCD_VoidDisplaySpecialPattern(PWM_DRAWER_GLCD_FALLING_EDGE); pixel_width_count += 5;
+<<<<<<< HEAD
  		for (local_u16Counter = 0; local_u16Counter < ((u16)(copy_f32Low_Time*(f32)local_u16Scale)); local_u16Counter++)
+=======
+		 
+ 		for (local_u16Counter = 0; local_u16Counter < ((u16)(copy_f32Low_Time*(f32)10)); local_u16Counter++)
+>>>>>>> refs/remotes/origin/main
 		{
  			GLCD_VoidDisplaySpecialPattern(PWM_DRAWER_GLCD_LOW_LINE); pixel_width_count += 5;
  		}
@@ -86,12 +104,22 @@ None
  	/* Display Arrow for Time Period */
  	GLCD_VoidGoToPos(5, 0);
  	GLCD_VoidDisplaySpecialPattern(PWM_DRAWER_GLCD_LEFT_ARROW_HEAD);
+<<<<<<< HEAD
  	for (local_u16Counter = 0; local_u16Counter < ((u16)(copy_f32High_Time*(f32)local_u16Scale)); local_u16Counter++)
+=======
+	 
+ 	for (local_u16Counter = 0; local_u16Counter < ((u16)(copy_f32High_Time*(f32)10)); local_u16Counter++)
+>>>>>>> refs/remotes/origin/main
 	{
  		GLCD_VoidDisplaySpecialPattern(PWM_DRAWER_GLCD_ARROW_MIDDLE_BODY);
  	}
  	GLCD_VoidDisplaySpecialPattern(PWM_DRAWER_GLCD_ARROW_MIDDLE_BODY);
+<<<<<<< HEAD
  	for (local_u16Counter = 0; local_u16Counter < ((u16)(copy_f32Low_Time*(f32)local_u16Scale)); local_u16Counter++)
+=======
+	 
+ 	for (local_u16Counter = 0; i < ((u16)(copy_f32Low_Time*(f32)10)); local_u16Counter++)
+>>>>>>> refs/remotes/origin/main
 	{
  		GLCD_VoidDisplaySpecialPattern(PWM_DRAWER_GLCD_ARROW_MIDDLE_BODY);
  	}
