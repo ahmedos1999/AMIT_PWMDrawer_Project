@@ -37,5 +37,4 @@
 	void GLCD_VoidPrintCharacter(u8 copy_u8Data);
 	u8 GLCD_u8PrintString(const char * copy_u8String);
 
-
 #endif /* GLCD_INTERFACE_H_ */

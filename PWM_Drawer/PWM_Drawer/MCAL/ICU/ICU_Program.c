@@ -89,7 +89,7 @@ void ICU_VoidTimer1SignalCapture(f32* copy_Ptrf32Duty, f32* copy_Ptrf32Frequency
 		*copy_Ptrf32Duty = ( ((f32)ICU_OnCounter / (f32)ICU_TotalCounter )) * 100;
 		*copy_Ptrf32Periodic_Time = (((f32)ICU_TotalCounter) * ((f32)local_u16PS/(f32)F_CPU));
 		*copy_Ptrf32Frequency =  ((f32)1 / *copy_Ptrf32Periodic_Time);
-		*copy_Ptrf32High_Time = (f32)ICU_OnCounter * ((f32)local_u16PS/(f32)F_CPU);
+		*copy_Ptrf32High_Time = ( (f32)ICU_OnCounter * ((f32)local_u16PS/(f32)F_CPU) );
 		*copy_Ptrf32Low_Time = ((f32)ICU_TotalCounter - (f32)ICU_OnCounter) * ((f32)local_u16PS/(f32)F_CPU);
 		Done = 0;
 		Ints = 0;

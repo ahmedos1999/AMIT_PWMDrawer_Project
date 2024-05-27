@@ -393,8 +393,6 @@ void TIMER1_VoidInit(void)
 	TIMERS_TCCR1B |= TIMER1_PRESCALER;
 }
 
-
-
 void TIMER2_VoidInit(void)
 {
 	/***** Wave Generation Section *****/
@@ -519,6 +517,7 @@ void TIMER0_VoidDelayms(u16 copy_u16DelayTime)
 
 	TIMERS_TCCR0 |= TIMER0_PRESCALER_64;	// Every 250 Ticks = 1 ms at P.S.64
 	CLR_BIT(TIMERS_TIMSK, TIMSK_OCIE0);		// Disable CTC Interrupt
+	TIMERS_OCR0 = 250;
 	for (local_Counter = 0; local_Counter < copy_u16DelayTime; local_Counter++)
 	{
 		TIMERS_TCNT0 = 0x00;
@@ -527,26 +526,66 @@ void TIMER0_VoidDelayms(u16 copy_u16DelayTime)
 	}
 	TIMERS_TCCR0 &= 0b11111000;
 	TIMERS_TCCR0 |= TIMER0_PRESCALER;
+	TIMERS_OCR0 = TIMER0_COMPARE_VALUE;
+	SET_BIT(TIMERS_TIMSK, TIMSK_OCIE0);		// Re-Enable CTC Interrupt
+}
+
+void TIMER0_VoidDelayUs(u32 copy_u32DelayTime)
+{
+	u32 local_u32Counter = 0;
+
+	TIMERS_TCCR0 |= TIMER0_PRESCALER_8;	// Every 2 Ticks = 1 us at P.S.8
+	CLR_BIT(TIMERS_TIMSK, TIMSK_OCIE0);		// Disable CTC Interrupt
+	TIMERS_OCR0 = 2;
+	for (local_u32Counter = 0; local_u32Counter < copy_u32DelayTime; local_u32Counter++)
+	{
+		TIMERS_TCNT0 = 0x00;
+		while((GET_BIT(TIMERS_TIFR, TIFR_OCF0)) == 0);		// Polling for Interrupt Flag
+		SET_BIT(TIMERS_TIFR, TIFR_OCF0);					// Writing one to Flag to Clear it
+	}
+	TIMERS_TCCR0 &= 0b11111000;
+	TIMERS_TCCR0 |= TIMER0_PRESCALER;
+	TIMERS_OCR0 = TIMER0_COMPARE_VALUE;
 	SET_BIT(TIMERS_TIMSK, TIMSK_OCIE0);		// Re-Enable CTC Interrupt
 }
 
 void TIMER2_VoidDelayms(u16 copy_u16DelayTime)
 {
 	u16 local_Counter = 0;
-
+	
 	TIMERS_TCCR2 |= TIMER2_PRESCALER_64;	// Every 250 Ticks = 1 ms at P.S.64
 	CLR_BIT(TIMERS_TIMSK, TIMSK_OCIE2);		// Disable CTC Interrupt
+	TIMERS_OCR2 = 250;
 	for (local_Counter = 0; local_Counter < copy_u16DelayTime; local_Counter++)
 	{
-		TIMERS_TCNT0 = 0x00;
+		TIMERS_TCNT2 = 0x00;
 		while((GET_BIT(TIMERS_TIFR, TIFR_OCF2)) == 0);		// Polling for Interrupt Flag
 		SET_BIT(TIMERS_TIFR, TIFR_OCF2);					// Writing one to Flag to Clear it
 	}
 	TIMERS_TCCR2 &= 0b11111000;
 	TIMERS_TCCR2 |= TIMER2_PRESCALER;
+	TIMERS_OCR2 = TIMER2_COMPARE_VALUE;
 	SET_BIT(TIMERS_TIMSK, TIMSK_OCIE2);		// Re-Enable CTC Interrupt
 }
 
+void TIMER2_VoidDelayUs(u32 copy_u32DelayTime)
+{
+	u32 local_u32Counter = 0;
+
+	TIMERS_TCCR2 |= TIMER2_PRESCALER_8;	// Every 2 Ticks = 1 us at P.S.8
+	CLR_BIT(TIMERS_TIMSK, TIMSK_OCIE2);		// Disable CTC Interrupt
+	TIMERS_OCR2 = 2;
+	for (local_u32Counter = 0; local_u32Counter < copy_u32DelayTime; local_u32Counter++)
+	{
+		TIMERS_TCNT2 = 0x00;
+		while((GET_BIT(TIMERS_TIFR, TIFR_OCF2)) == 0);		// Polling for Interrupt Flag
+		SET_BIT(TIMERS_TIFR, TIFR_OCF2);					// Writing one to Flag to Clear it
+	}
+	TIMERS_TCCR2 &= 0b11111000;
+	TIMERS_TCCR2 |= TIMER2_PRESCALER;
+	TIMERS_OCR2 = TIMER2_COMPARE_VALUE;
+	SET_BIT(TIMERS_TIMSK, TIMSK_OCIE2);		// Re-Enable CTC Interrupt
+}
 /********** Call-Back Function **********/
 u8 TIMERS_u8CallBackFunction(void(*copy_ptrFunction)(void), u8 copy_ptrNum)
 {
@@ -588,7 +627,7 @@ u8 TIMER0_u8PWMDutyCycle(u8 copy_u8DutyPercent)
 	
 	if ((copy_u8DutyPercent >= 0) &(copy_u8DutyPercent <= 100))
 	{
-		TIMER0_voidUpdateCompareValue((copy_u8DutyPercent/100) * TIMER0_MAX);
+		TIMER0_voidUpdateCompareValue((u8)(((f32)copy_u8DutyPercent/(f32)100) * (f32)TIMER0_MAX));
 	}
 	else
 	{
@@ -604,24 +643,24 @@ u8 TIMER1_u8PWMDutyCycle(u8 copy_u8DutyPercent)
 	if ((copy_u8DutyPercent >= 0) &(copy_u8DutyPercent <= 100))
 	{
 		#if TIMER1_WAVE_GEN_MODE == TIMER1_PWM_PHASE_FREQ_CORRECT_ICR1
-			TIMER1_voidUpdateCompareValue((copy_u8DutyPercent/100) * TIMERS_ICR1DATA, A);
-			TIMER1_voidUpdateCompareValue((copy_u8DutyPercent/100) * TIMERS_ICR1DATA, B);
+			TIMER1_voidUpdateCompareValue((u8)(((f32)copy_u8DutyPercent/(f32)100) * (f32)TIMERS_ICR1DATA), A);
+			TIMER1_voidUpdateCompareValue((u8)(((f32)copy_u8DutyPercent/(f32)100) * (f32)TIMERS_ICR1DATA), B);
 		
 		#elif TIMER1_WAVE_GEN_MODE == TIMER1_PWM_PHASE_CORRECT_ICR1
-			TIMER1_voidUpdateCompareValue((copy_u8DutyPercent/100) * TIMERS_ICR1DATA, A);
-			TIMER1_voidUpdateCompareValue((copy_u8DutyPercent/100) * TIMERS_ICR1DATA, B);
+			TIMER1_voidUpdateCompareValue((u8)(((f32)copy_u8DutyPercent/(f32)100) * (f32)TIMERS_ICR1DATA), A);
+			TIMER1_voidUpdateCompareValue((u8)(((f32)copy_u8DutyPercent/(f32)100) * (f32)TIMERS_ICR1DATA), B);
 			
 		#elif TIMER1_WAVE_GEN_MODE == TIMER1_CTC_ICR1
-			TIMER1_voidUpdateCompareValue((copy_u8DutyPercent/100) * TIMERS_ICR1DATA, A);
-			TIMER1_voidUpdateCompareValue((copy_u8DutyPercent/100) * TIMERS_ICR1DATA, B);
+			TIMER1_voidUpdateCompareValue((u8)(((f32)copy_u8DutyPercent/(f32)100) * (f32)TIMERS_ICR1DATA), A);
+			TIMER1_voidUpdateCompareValue((u8)(((f32)copy_u8DutyPercent/(f32)100) * (f32)TIMERS_ICR1DATA), B);
 			
 		#elif TIMER1_WAVE_GEN_MODE == TIMER1_FAST_PWM_ICR1
-			TIMER1_voidUpdateCompareValue((copy_u8DutyPercent/100) * TIMERS_ICR1DATA, A);
-			TIMER1_voidUpdateCompareValue((copy_u8DutyPercent/100) * TIMERS_ICR1DATA, B);
+			TIMER1_voidUpdateCompareValue((u8)(((f32)copy_u8DutyPercent/(f32)100) * (f32)TIMERS_ICR1DATA), A);
+			TIMER1_voidUpdateCompareValue((u8)(((f32)copy_u8DutyPercent/(f32)100) * (f32)TIMERS_ICR1DATA), B);
 		
 		#else
-			TIMER1_voidUpdateCompareValue((copy_u8DutyPercent/100) * TIMER1_MAX, A);
-			TIMER1_voidUpdateCompareValue((copy_u8DutyPercent/100) * TIMER1_MAX, B);
+			TIMER1_voidUpdateCompareValue((u8)(((f32)copy_u8DutyPercent/(f32)100) * (f32)TIMER1_MAX), A);
+			TIMER1_voidUpdateCompareValue((u8)(((f32)copy_u8DutyPercent/(f32)100) * (f32)TIMER1_MAX), B);
 			
 		#endif
 	}
@@ -638,7 +677,7 @@ u8 TIMER2_u8PWMDutyCycle(u8 copy_u8DutyPercent)
 	
 	if ((copy_u8DutyPercent >= 0) &(copy_u8DutyPercent <= 100))
 	{
-		TIMER2_voidUpdateCompareValue((copy_u8DutyPercent/100) * TIMER2_MAX);
+		TIMER2_voidUpdateCompareValue((u8)(((f32)copy_u8DutyPercent/(f32)100) * (f32)TIMER2_MAX));
 	}
 	else
 	{

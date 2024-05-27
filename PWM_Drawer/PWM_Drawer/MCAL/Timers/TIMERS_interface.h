@@ -41,7 +41,9 @@
 	
 	/* Delay Functions */
 	void TIMER0_VoidDelayms(u16 copy_u16DelayTime);
+	void TIMER0_VoidDelayUs(u32 copy_u32DelayTime);
 	void TIMER2_VoidDelayms(u16 copy_u16DelayTime);
+	void TIMER2_VoidDelayUs(u32 copy_u32DelayTime);
 	
 	/* Call Back Function for All Timers */
 	/*
@@ -55,5 +57,10 @@
 	OVF0	- Overflow on Timer0
 	*/
 	u8 TIMERS_u8CallBackFunction(void(*copy_ptrFunction)(void), u8 copy_ptrNum);
+	
+	/* Duty Cycle Functions */
+	u8 TIMER0_u8PWMDutyCycle(u8 copy_u8DutyPercent);
+	u8 TIMER1_u8PWMDutyCycle(u8 copy_u8DutyPercent);
+	u8 TIMER2_u8PWMDutyCycle(u8 copy_u8DutyPercent);
 
 #endif

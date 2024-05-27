@@ -24,7 +24,7 @@
 	TIMER0_EXT_CLK_FALLING_EDGE
 	TIMER0_EXT_CLK_RISING_EDGE
 	*/
-	#define TIMER0_PRESCALER    TIMER0_PRESCALER_8
+	#define TIMER0_PRESCALER    TIMER0_PRESCALER_1024
 	
 	/* WaveGeneration mode Timer0*/
 	/*
@@ -52,7 +52,7 @@
 	*/
 	#define TIMER0_COMPARE_MATCH_OUTPUT_MODE	MODE2
 	
-	#define TIMER0_COMPARE_VALUE	125		/* Value put in OCR0 to Compare */
+	#define TIMER0_COMPARE_VALUE	200		/* Value put in OCR0 to Compare */
 	
 	
 	/********** TIMER 1 CONFIG **********/

@@ -47,6 +47,8 @@ int main(void)
 	DIO_u8SetPinDirection(DIO_PORTB, DIO_PIN3, DIO_PIN_OUTPUT);		/* Timer0 PWM OC0 */
 	DIO_u8SetPinDirection(DIO_PORTD, DIO_PIN6, DIO_PIN_INPUT);		/* ICP1 Pin as Input */
 	
+	
+	TIMER0_u8PWMDutyCycle(80);
     /* Replace with your application code */
     while (1) 
     {
