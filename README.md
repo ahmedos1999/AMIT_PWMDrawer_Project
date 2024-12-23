@@ -92,4 +92,4 @@ This project is licensed under the MIT License. See the `LICENSE` file for more 
 
 ## Acknowledgments
 
-Special thanks to Eng.Eman for her guidance and support throughout the development of this project.
+Special thanks to Eng.Eman Assem for her guidance and support throughout the development of this project.
